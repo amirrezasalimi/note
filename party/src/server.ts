@@ -3,6 +3,7 @@ import { onConnect } from "y-partykit";
 
 export default class YjsServer implements Party.Server {
   constructor(public party: Party.Room) {}
+  userCanWrite: Record<string, boolean> = {};
   async onConnect(conn: Party.Connection) {
     const params = new URLSearchParams(conn.uri);
     const password = params.get("password");
@@ -10,11 +11,14 @@ export default class YjsServer implements Party.Server {
     let readOnly = false;
 
     const roomPassword = await this.party.storage.get("password");
-    console.log(roomPassword, password);
 
     if (roomPassword && password !== roomPassword) {
       readOnly = true;
     }
+    if (!readOnly) {
+      this.userCanWrite[conn.id] = true;
+    }
+
     conn.send(
       JSON.stringify({
         event: "permission",
@@ -36,6 +40,9 @@ export default class YjsServer implements Party.Server {
     } else {
     }
   }
+  async onDisconnect(conn: Party.Connection) {
+    delete this.userCanWrite[conn.id];
+  }
   async onMessage(
     message: string | ArrayBuffer | ArrayBufferView,
     sender: Party.Connection<unknown>
@@ -45,15 +52,21 @@ export default class YjsServer implements Party.Server {
     // handle unlock
     if (typeof message === "string") {
       const data = JSON.parse(message);
-      console.log(data);
-
       if (data.event === "unlock" && typeof data.data === "string") {
         // check password
         const roomPassword = await this.party.storage.get("password");
-        console.log(roomPassword, data.data);
 
-        if (typeof roomPassword === "string" && roomPassword === data.data) {
-          console.log(`Unlocking the room for ${sender.id}`);
+        if (roomPassword !== data.data) {
+          return sender.send(
+            JSON.stringify({
+              event: "toast",
+              data: "Invalid password",
+            })
+          );
+        }
+
+        if (typeof roomPassword === "string") {
+          this.userCanWrite[sender.id] = true;
           sender.send(
             JSON.stringify({
               event: "permission",
@@ -70,14 +83,26 @@ export default class YjsServer implements Party.Server {
           );
         }
       }
-      // handle lock
-      if (data.event === "lock") {
-        const roomPassword = await this.party.storage.get("password");
-        // check if password is already set
-        if (typeof roomPassword === "string") {
+      //  update the password
+      if (data.event === "update-password") {
+        if (!this.userCanWrite[sender.id]) {
+          return sender.send(
+            JSON.stringify({
+              event: "toast",
+              data: "You don't have permission to update the password",
+            })
+          );
+        }
+        // if its empty, remove the password
+        if (data.data === "") {
+          await this.party.storage.delete("password");
+          this.party.broadcast(
+            JSON.stringify({
+              event: "refresh",
+            })
+          );
           return;
         }
-        // set password
         this.party.storage.put("password", data.data);
         this.party.broadcast(
           JSON.stringify({

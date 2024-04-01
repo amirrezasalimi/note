@@ -15,9 +15,16 @@ const Note = () => {
         onClose={note.closePasswordModal}
         className="max-w-sm"
       >
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <h1 className="text-lg font-bold">
-            {!note.hasPermission ? "Unlock" : "Lock"} the note
+            {
+              // update password or lock | unlock
+              note.isLocked
+                ? note.hasPermission
+                  ? "Update note password"
+                  : "Unlock"
+                : "Lock note"
+            }
           </h1>
           <input
             value={note.password ?? ""}
@@ -25,15 +32,24 @@ const Note = () => {
             type="password"
             className="w-full px-4 py-2 border border-gray-300 rounded-md"
           />
+          {note.isLocked && note.hasPermission && (
+            <span className="text-sm text-gray-500">
+              remove the password by leaving the field empty
+            </span>
+          )}
           <button
             onClick={note.lockAction}
-            className="w-full bg-blue-500 text-white rounded-md px-4 py-2"
+            className="w-full mt-2 bg-blue-500 text-white rounded-md px-4 py-2"
           >
-            {!note.hasPermission && note.isLocked ? "Unlock" : "Lock"}
+            {/* update password or lock | unlock */}
+            {note.isLocked
+              ? note.hasPermission
+                ? "Update password"
+                : "Unlock"
+              : "Lock"}
           </button>
         </div>
       </Modal>
-
       <div className="w-full h-screen flex flex-col">
         <div className="w-full flex items-center justify-end px-8 gap-4 py-4">
           <span className="flex gap-1 justify-center items-center text-sm">

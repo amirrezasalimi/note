@@ -15,7 +15,11 @@ import * as awarenessProtocol from "y-protocols/awareness.js";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import PartySocket from "partysocket";
 
-const host = "https://party.amirrezasalimi.partykit.dev";
+const isLocalhost = window.location.href.indexOf("localhost");
+const host =
+  isLocalhost > -1
+    ? "http://localhost:1999"
+    : "https://party.amirrezasalimi.partykit.dev";
 // make a unique color with name
 const colors = [
   "#958DF1",
@@ -129,20 +133,23 @@ const useNote = () => {
         case "refresh":
           window.location.reload();
           break;
+
+        case "toast":
+          alert(data.data);
+          break;
       }
     };
   }, [editor, ws, hasPermission]);
 
   useEffect(() => {
-   
-      editor
-        ?.chain()
-        .focus()
-        .updateUser({
-          name: "Anonymous",
-          color: userColor(String(userId)),
-        })
-        .run();
+    editor
+      ?.chain()
+      .focus()
+      .updateUser({
+        name: "Anonymous",
+        color: userColor(String(userId)),
+      })
+      .run();
   }, [status]);
 
   useLayoutEffect(() => {
@@ -170,10 +177,11 @@ const useNote = () => {
   const [passwordModal, setPasswordModal] = useState(false);
 
   const lockAction = () => {
+    if ((hasPermission && isLocked) || !isLocked) {
+      wsEvent("update-password", password);
+    }
     if (!hasPermission && isLocked) {
       wsEvent("unlock", password);
-    } else {
-      wsEvent("lock", password);
     }
     setPasswordModal(false);
   };
