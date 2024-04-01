@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* load Charter font */
+/* regular */
+@font-face {
+    font-family: 'Charter';
+    src: url('/fonts/charter_regular-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+/* bold */
+@font-face {
+    font-family: 'Charter';
+    src: url('/fonts/charter_bold-webfont.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+/* italic */
+@font-face {
+    font-family: 'Charter';
+    src: url('/fonts/charter_italic-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+
+body{
+    background-color: #f0f0f0;
+    font-family: 'Charter', 'Georgia', 'Times', serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
