@@ -29,7 +29,7 @@ const Note = () => {
             onClick={note.lockAction}
             className="w-full bg-blue-500 text-white rounded-md px-4 py-2"
           >
-            {!note.hasPermission && (note.isLocked ? "Unlock" : "Lock")}
+            {!note.hasPermission && note.isLocked ? "Unlock" : "Lock"}
           </button>
         </div>
       </Modal>
