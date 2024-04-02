@@ -1,7 +1,11 @@
 import { EditorContent } from "@tiptap/react";
 import useNote from "./hooks/note";
 import "./style.scss";
-import { LockIcon, UnlockIcon } from "../../shared/components/icons";
+import {
+  GithubIcon,
+  LockIcon,
+  UnlockIcon,
+} from "../../shared/components/icons";
 import clsx from "clsx";
 import Modal from "../../shared/components/modal";
 
@@ -51,23 +55,30 @@ const Note = () => {
         </div>
       </Modal>
       <div className="w-full h-screen flex flex-col">
-        <div className="w-full flex items-center justify-end px-8 gap-4 py-4">
-          <span className="flex gap-1 justify-center items-center text-sm">
-            <span className="w-2 h-2 bg-green-500 rounded-full" />
-            <span>{note.users?.length ?? 1}</span>
-            <span>user online</span>
-          </span>
+        <div className="w-full flex items-center justify-between px-8 gap-4 py-4">
           <div>
-            <button
-              className={clsx(
-                "flex font-[Charter] gap-2 items-center text-sm bg-gray-200 px-3 py-1 rounded-md transition-colors",
-                "hover:bg-gray-300 cursor-pointer"
-              )}
-              onClick={note.openLockModal}
-            >
-              {!note.hasPermission ? <UnlockIcon /> : <LockIcon />}
-              <span>{!note.hasPermission ? "Unlock" : "Lock"}</span>
-            </button>
+            <a href="https://github.com/amirrezasalimi/note" target="_blank">
+              <GithubIcon />
+            </a>
+          </div>
+          <div className="flex gap-4">
+            <span className="flex gap-1 justify-center items-center text-sm">
+              <span className="w-2 h-2 bg-green-500 rounded-full" />
+              <span>{note.users?.length ?? 1}</span>
+              <span>user online</span>
+            </span>
+            <div>
+              <button
+                className={clsx(
+                  "flex font-[Charter] gap-2 items-center text-sm bg-gray-200 px-3 py-1 rounded-md transition-colors",
+                  "hover:bg-gray-300 cursor-pointer"
+                )}
+                onClick={note.openLockModal}
+              >
+                {!note.hasPermission ? <UnlockIcon /> : <LockIcon />}
+                <span>{!note.hasPermission ? "Unlock" : "Lock"}</span>
+              </button>
+            </div>
           </div>
         </div>
         <div className="container mx-auto max-w-2xl h-full">
