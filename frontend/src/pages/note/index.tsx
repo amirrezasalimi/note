@@ -67,18 +67,26 @@ const Note = () => {
               <span>{note.users?.length ?? 1}</span>
               <span>user online</span>
             </span>
-            <div>
-              <button
-                className={clsx(
-                  "flex font-[Charter] gap-2 items-center text-sm bg-gray-200 px-3 py-1 rounded-md transition-colors",
-                  "hover:bg-gray-300 cursor-pointer"
-                )}
-                onClick={note.openLockModal}
-              >
-                {!note.hasPermission ? <UnlockIcon /> : <LockIcon />}
-                <span>{!note.hasPermission ? "Unlock" : "Lock"}</span>
-              </button>
-            </div>
+            <button 
+            onClick={note.bionicToggle}
+            className={
+              clsx(
+                "flex gap-2 items-center text-sm bg-gray-200 px-3 py-1 rounded-md transition-colors hover:bg-gray-300 cursor-pointer",
+                note.isBionic && "!bg-black text-white"
+              )
+            }>
+              bionic
+            </button>
+            <button
+              className={clsx(
+                "flex font-[Charter] gap-2 items-center text-sm bg-gray-200 px-3 py-1 rounded-md transition-colors",
+                "hover:bg-gray-300 cursor-pointer"
+              )}
+              onClick={note.openLockModal}
+            >
+              {!note.hasPermission ? <UnlockIcon /> : <LockIcon />}
+              <span>{!note.hasPermission ? "Unlock" : "Lock"}</span>
+            </button>
           </div>
         </div>
         <div className="container mx-auto max-w-2xl h-full">

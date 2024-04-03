@@ -1,5 +1,5 @@
 import { useEditor } from "@tiptap/react";
-import { useLocalStorage, useLocation } from "react-use";
+import { useLocalStorage, useLocation, useUpdate } from "react-use";
 import Typography from "@tiptap/extension-typography";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
@@ -13,6 +13,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import YPartyKitProvider from "y-partykit/provider";
 import * as awarenessProtocol from "y-protocols/awareness.js";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
+import Bold from "@tiptap/extension-bold";
 import PartySocket from "partysocket";
 
 const isLocalhost = window.location.href.indexOf("localhost");
@@ -90,6 +91,7 @@ const useNote = () => {
     ws.send(JSON.stringify({ event, data }));
   // editor
 
+  const forceUpdate = useUpdate();
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -98,6 +100,29 @@ const useNote = () => {
       Document,
       Paragraph,
       Text,
+      Bold.extend({
+        addAttributes() {
+          return {
+            bionic: {
+              default: null,
+              parseHTML: (element) => {
+                return {
+                  color: element.style.color,
+                };
+              },
+              renderHTML: (attributes) => {
+                // if its has  bionic class, return the bionic class
+                if (attributes.bionic) {
+                  return {
+                    class: "bionic",
+                  };
+                }
+                return {};
+              },
+            },
+          };
+        },
+      }),
       Image,
       Dropcursor,
       Typography,
@@ -115,6 +140,9 @@ const useNote = () => {
       },
     },
     editable: false,
+    onUpdate: ({ editor }) => {
+      forceUpdate();
+    },
   });
   useLayoutEffect(() => {
     if (!ws || !editor) return;
@@ -185,6 +213,67 @@ const useNote = () => {
     }
     setPasswordModal(false);
   };
+
+  const content = editor?.getHTML() ?? "";
+
+  const isBionic = useMemo(() => {
+    // check if there is any element with class "bionic" from the content
+    const el = document.createElement("div");
+    el.innerHTML = content;
+    const bionic = el.querySelector(".bionic");
+    if (bionic) {
+      return true;
+    }
+    return false;
+  }, [content]);
+
+  const bionicToggle = () => {
+    if (isBionic) {
+      // reverse bionic , unwrap all bionic elements
+      const el = document.createElement("div");
+      el.innerHTML = content;
+      const bionic = el.querySelectorAll(".bionic");
+      bionic.forEach((b) => {
+        b.outerHTML = b.innerHTML;
+      });
+      editor?.chain().setContent(el.innerHTML).run();
+    } else {
+      const el = document.createElement("div");
+      el.innerHTML = content;
+
+      // Get all non-heading elements
+      const nonHeadingElements = Array.from(
+        el.querySelectorAll("*:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6)")
+      ).filter((el) => el.textContent?.length ?? 0 > 5);
+
+      nonHeadingElements.forEach((element) => {
+        const text = element.textContent ?? "";
+        const words = text.split(" ");
+
+        const bionicWords = words
+          .filter((w) => w.length > 5)
+          .map((w) => {
+            // first half
+            return w.slice(0, w.length / 2);
+          });
+        let bionicContent = element.innerHTML;
+
+        bionicWords.forEach((w) => {
+          if (w.length < 3) {
+            return;
+          }
+          bionicContent = bionicContent.replace(
+            w,
+            `<strong bionic>${w}</strong>`
+          );
+        });
+        element.innerHTML = bionicContent;
+      });
+
+      editor?.chain().setContent(el.innerHTML).run();
+    }
+  };
+
   return {
     noteId,
     editor,
@@ -197,6 +286,8 @@ const useNote = () => {
     setPassword,
     password,
     lockAction,
+    bionicToggle,
+    isBionic,
   };
 };
 
