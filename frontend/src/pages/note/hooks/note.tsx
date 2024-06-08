@@ -17,11 +17,10 @@ import Bold from "@tiptap/extension-bold";
 import PartySocket from "partysocket";
 
 const isLocalhost = window.location.href.indexOf("localhost");
-const host = "https://party.amirrezasalimi.partykit.dev"
-// const host =
-//   isLocalhost > -1
-//     ? "http://localhost:1999"
-//     : "https://party.amirrezasalimi.partykit.dev";
+const host =
+  isLocalhost > -1
+    ? "http://localhost:1999"
+    : "https://party.amirrezasalimi.partykit.dev";
 
 // make a unique color with name
 const colors = [
