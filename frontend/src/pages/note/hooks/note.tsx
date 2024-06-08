@@ -17,10 +17,12 @@ import Bold from "@tiptap/extension-bold";
 import PartySocket from "partysocket";
 
 const isLocalhost = window.location.href.indexOf("localhost");
-const host =
-  isLocalhost > -1
-    ? "http://localhost:1999"
-    : "https://party.amirrezasalimi.partykit.dev";
+const host = "https://party.amirrezasalimi.partykit.dev"
+// const host =
+//   isLocalhost > -1
+//     ? "http://localhost:1999"
+//     : "https://party.amirrezasalimi.partykit.dev";
+
 // make a unique color with name
 const colors = [
   "#958DF1",
@@ -55,6 +57,12 @@ const useNote = () => {
   const [isLocked, setIsLocked] = useState(false);
   const [hasPermission, setHasPermission] = useState(true);
   const [status, setStatus] = useState("loading");
+
+  const [switchContainer, setSwitchContainer] = useLocalStorage('switch-mode', false);
+
+  const fullWidth = () => {
+    setSwitchContainer(!switchContainer)
+  }
 
   // init
   const [ydoc, provider, ws] = useMemo(() => {
@@ -288,6 +296,8 @@ const useNote = () => {
     lockAction,
     bionicToggle,
     isBionic,
+    fullWidth,
+    switchContainer
   };
 };
 

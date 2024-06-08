@@ -17,7 +17,7 @@ const Modal = ({ isOpen, onClose, children,className }: Props) => {
     >
       <div
         className={
-            clsx("bg-white p-4 rounded-lg w-1/2", className)
+            clsx("bg-light-background dark:bg-dark-background p-4 rounded-lg w-1/2", className)
         }
         onClick={(e) => e.stopPropagation()}
       >
@@ -39,7 +39,7 @@ const Modal = ({ isOpen, onClose, children,className }: Props) => {
             </svg>
           </button>
         </div>
-        <div>{children}</div>
+        <div className="text-light-text dark:text-dark-text">{children}</div>
       </div>
     </div>
   );
