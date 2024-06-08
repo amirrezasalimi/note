@@ -76,7 +76,10 @@ const Note = () => {
               )}
               onClick={note.fullWidth}
             >
-              Wide Container
+              {
+                note.isFullWidth ? "Normal" : "Wide"
+              }{" "}
+              Container
             </button>
             <button
               onClick={note.bionicToggle}
@@ -103,14 +106,14 @@ const Note = () => {
         </div>
         <div
           className={`container mx-auto text-light-text h-full pt-24 ${
-            note.switchContainer ? "lg:max-w-5xl max-w-2xl" : "max-w-2xl"
+            note.isFullWidth ? "lg:max-w-5xl max-w-2xl" : "max-w-2xl"
           }`}
         >
           <div className="w-full h-full">
             <EditorContent
               editor={note.editor}
               className={`w-full h-full editor-Content ${
-                note.switchContainer ? "active" : ""
+                note.isFullWidth ? "active" : ""
               }`}
             />
           </div>

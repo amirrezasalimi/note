@@ -297,7 +297,7 @@ const useNote = () => {
     bionicToggle,
     isBionic,
     fullWidth,
-    switchContainer
+    isFullWidth: switchContainer,
   };
 };
 
