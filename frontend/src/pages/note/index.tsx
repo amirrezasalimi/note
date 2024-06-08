@@ -8,7 +8,7 @@ import {
 } from "../../shared/components/icons";
 import clsx from "clsx";
 import Modal from "../../shared/components/modal";
-import DarkModeToggle from "./hooks/dark-mode-toggle";
+import DarkModeToggle from "./components/dark-mode-toggle";
 
 const Note = () => {
   const note = useNote();
@@ -62,7 +62,6 @@ const Note = () => {
               <GithubIcon />
             </a>
             <DarkModeToggle />
-
           </div>
           <div className="flex gap-4">
             <span className="flex gap-1 justify-center items-center text-sm text-light-text dark:text-dark-text">
@@ -70,19 +69,25 @@ const Note = () => {
               <span>{note.users?.length ?? 1}</span>
               <span>user online</span>
             </span>
-            <button className={clsx(
+            <button
+              className={clsx(
                 "hidden lg:flex font-[Charter] gap-2 bg-light-button dark:hover:bg-slate-700 dark:bg-dark-button dark:text-dark-text text-light-text items-center text-sm px-3 py-1 rounded-md transition-colors",
                 "hover:bg-gray-300 cursor-pointer"
-              )} onClick={note.fullWidth}>Switch Container</button>
-            <button 
-            onClick={note.bionicToggle}
-            className={
-              clsx(
+              )}
+              onClick={note.fullWidth}
+            >
+              Wide Container
+            </button>
+            <button
+              onClick={note.bionicToggle}
+              className={clsx(
                 "flex gap-2 items-center text-sm bg-light-button dark:bg-dark-button dark:text-dark-text text-light-text px-3 py-1 rounded-md transition-colors dark:hover:bg-slate-700 hover:bg-gray-300 cursor-pointer",
                 note.isBionic && "!bg-black text-white"
-              )
-            }>
-              <div className="font-light"><span className="font-bold">Bio</span>nic</div>
+              )}
+            >
+              <div className="font-light">
+                <span className="font-bold">Bio</span>nic
+              </div>
             </button>
             <button
               className={clsx(
@@ -96,9 +101,18 @@ const Note = () => {
             </button>
           </div>
         </div>
-        <div className={`container mx-auto text-light-text h-full pt-24 ${note.switchContainer ? 'lg:max-w-5xl max-w-2xl' : "max-w-2xl"}`}>
+        <div
+          className={`container mx-auto text-light-text h-full pt-24 ${
+            note.switchContainer ? "lg:max-w-5xl max-w-2xl" : "max-w-2xl"
+          }`}
+        >
           <div className="w-full h-full">
-            <EditorContent editor={note.editor} className={`w-full h-full editor-Content ${note.switchContainer ? 'active' : ''}`} />
+            <EditorContent
+              editor={note.editor}
+              className={`w-full h-full editor-Content ${
+                note.switchContainer ? "active" : ""
+              }`}
+            />
           </div>
         </div>
       </div>
