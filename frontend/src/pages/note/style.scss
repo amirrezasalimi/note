@@ -25,8 +25,14 @@
 }
 
 @media only screen and (min-width: 959px) {
-  .editor-Content.active>.tiptap {
-    max-width: var(--container-width);
+  .editor-Content.active {
+    >.tiptap {
+      max-width: var(--container-width);
+
+      img {
+        max-width: 40rem;
+      }
+    }
   }
 }
 
@@ -37,9 +43,8 @@
   transition: width 0.3s ease;
 
   img {
-    // max-width: 100%;
+    max-width: 100%;
     border-radius: 8px;
-    max-width: 40rem;
 
     &.ProseMirror-selectednode {
       outline: 3px solid #68cef8;
