@@ -7,6 +7,10 @@
     @apply text-slate-200
   }
 
+  .tiptap>* code {
+    @apply text-slate-200
+  }
+
   .tiptap>*strong {
     @apply text-white
   }
