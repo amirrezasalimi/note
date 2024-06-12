@@ -33,15 +33,16 @@ PartyKit servers are fully programmable in TypeScript, JavaScript, and can even 
 
 ## Contributions
 
-Contributions to this project are welcome! Whether it's bug fixes, feature enhancements, or documentation improvements, feel free to open an issue or submit a pull request.
+#### Contributions to this project are welcome! Whether it's bug fixes, feature enhancements, or documentation improvements, feel free to open an issue or submit a pull request.
+<a href="https://github.com/amirrezasalimi/note/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=amirrezasalimi/note" />
+</a>
 
 ## Demo
 
 Check out the live demo [here](https://note.toolstack.run).
 
 ## Credits
-
-- Project Creator: [@amirsalimiiii](https://twitter.com/amirsalimiiii/)
 - PartyKit: [https://partykit.io/](https://partykit.io/)
 - Tiptap Editor: [https://tiptap.dev/](https://tiptap.dev/)
 
