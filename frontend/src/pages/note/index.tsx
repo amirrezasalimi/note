@@ -67,7 +67,7 @@ const Note = () => {
             <span className="flex gap-1 justify-center items-center text-sm text-light-text dark:text-dark-text">
               <span className="w-2 h-2 bg-green-500 rounded-full" />
               <span>{note.users?.length ?? 1}</span>
-              <span>user online</span>
+              <span>online</span>
             </span>
             <button
               className={clsx(
